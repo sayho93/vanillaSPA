@@ -12,13 +12,15 @@ export default function Breadcrumb({$app, initialState = [], onClick}) {
 
     this.render = () => {
         this.$target.innerHTML = `
-            <div class="nav-item">root</div>
-            ${this.state.map((node, index) => `<div class="nav-item" data-index="${index}">${node.name}</div>`).join('')}
+            <div class="navItem" style="${this.state.length > 0 ? 'color:#007bff' : ''}">root</div>
+            ${this.state.map((node, idx) => {
+                return `<div class="navItem" data-idx="${idx}" style="${idx !== this.state.length - 1 ? 'color:#007bff;' : ''}">${node.name}</div>`
+            }).join('')}
         `
     }
 
     this.$target.addEventListener('click', event => {
-        const $navItem = event.target.closest('.nav-item')
+        const $navItem = event.target.closest('.navItem')
         if($navItem){
             const idx = $navItem.dataset.idx
             this.onClick(idx ? parseInt(idx) : null)

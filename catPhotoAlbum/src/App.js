@@ -19,10 +19,10 @@ export default function App($app){
     const breadCrumb = new Breadcrumb({
         $app,
         initialState: this.state.depth,
-        onClick: index => {
-            if(index === this.state.depth.length - 1) return
+        onClick: idx => {
+            if(idx === this.state.depth.length - 1) return
 
-            if(index === null){
+            if(idx === null){
                 this.setState({
                     ...this.state,
                     isRoot: true,
@@ -30,7 +30,7 @@ export default function App($app){
                     nodes: Cache.root
                 })
             } else{
-                const nextDepth = this.state.depth.slice(0, index + 1)
+                const nextDepth = this.state.depth.slice(0, idx + 1)
                 this.setState({
                     ...this.state,
                     depth: nextDepth,

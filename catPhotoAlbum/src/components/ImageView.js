@@ -15,7 +15,7 @@ export default function ImageView({$app, initialState, onClick}){
     this.render = () => {
         this.$target.innerHTML = `
             <div class="content">
-                ${this.state ? `<img src="${Constants.BASE_IMG_URL}${this.state}" alt="Image"/>` : ''}            
+                ${this.state ? `<img src="${Constants.BASE_IMG_URL}${this.state}" alt="Image" style="width: 100%"/>` : ''}            
             </div>
         `
         this.$target.style.display = this.state ? 'block' : 'none'
