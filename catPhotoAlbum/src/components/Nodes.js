@@ -1,8 +1,9 @@
-export default function Nodes({$app, initialState, onClick, onPrevClick}){
+export default function Nodes({$app, initialState={}, onClick, onPrev}){
     this.state = initialState
     this.onClick = onClick
-    this.onPrevClick = onPrevClick
-    this.$target = document.createElement('ul')
+    this.onPrev = onPrev
+    this.$target = document.createElement('div')
+    this.$target.className = 'Nodes'
     $app.appendChild(this.$target)
 
     this.setState = nextState => {
@@ -13,11 +14,10 @@ export default function Nodes({$app, initialState, onClick, onPrevClick}){
     this.render = () => {
         if(this.state.nodes){
             const template = this.state.nodes.map(node => {
-                const iconPath = node.type === 'FILE' ? './assets/file.png' : './assets/directory.png'
                 return `
-                    <div class="Node" data-node-id="${node.id}">
-                        <img src="${iconPath}" alt="${node.name}"/>
-                        <span>${node.name}</span>
+                    <div class="Node" data-id="${node.id}">
+                        <img src="${node.type === 'DIRECTORY' ? 'assets/directory.png' : './assets/file.png'}" alt="${node.name}">
+                        <div>${node.name}</div>
                     </div>
                 `
             }).join('')
@@ -26,15 +26,12 @@ export default function Nodes({$app, initialState, onClick, onPrevClick}){
     }
 
     this.$target.addEventListener('click', event => {
-        const $node = event.target.closest('.Node')
-        if($node){
-            const nodeId = $node.dataset.nodeId
-            if(!nodeId){
-                this.onPrevClick()
-                return
-            }
-            const selectedNode = this.state.nodes.find(node => node.id === nodeId)
-            if(selectedNode) this.onClick(selectedNode)
+        const targ = event.target.closest('.Node')
+        if(targ){
+            const id = targ.dataset.id
+            console.log(id)
+            if(id) this.onClick(this.state.nodes.find(node => node.id === id))
+            else this.onPrev()
         }
     })
 

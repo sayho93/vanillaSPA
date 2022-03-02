@@ -21,31 +21,34 @@ const Helper = {
             return ret
         }
     },
-    //TODO POST
-    // fetch("https://jsonplaceholder.typicode.com/posts", {
-    //     method: "POST",
-    //     headers: {
-    //         "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({
-    //         title: "Test",
-    //         body: "I am testing!",
-    //         userId: 1,
-    //     }),
-    // }).then((response) => console.log(response));
-
-    // findPass: (email, pw) => {
-    //     return new Promise( (resolve, reject) => {
-    //         Log.info(Constants.API_FIND_USER)
-    //         let params = new URLSearchParams()
-    //         params.append('email', email)
-    //         params.append('name', pw)
-    //
-    //         axios.post(Constants.API_FIND_USER, params)
-    //             .then(res => resolve(res.data))
-    //             .catch(err => reject(new Error(err)))
-    //     })
-    // },
+    postTest: async (id= '') => {
+        const api = 'https://jsonplaceholder.typicode.com/posts'
+        const ret = {...ReturnModel}
+        try{
+            const res = await fetch(api, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    title: 'foo',
+                    body: 'bar',
+                    userId: 1
+                })
+            })
+            if(res.ok) ret.data = await res.json()
+            else {
+                ret.returnCode = -1
+                ret.returnMessage = res.statusText
+            }
+            return ret
+        } catch (err){
+            ret.returnCode = -1
+            ret.returnMessage = err.message
+            return ret
+        }
+    }
+    //TODO formData
 
     // setProfileImg: (userId, uri) => {
     //     return new Promise((resolve, reject) => {

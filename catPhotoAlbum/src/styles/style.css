@@ -34,7 +34,6 @@ body {
     display: flex;
     flex-direction: column;
     word-break: keep-all;
-    cursor: pointer;
 }
 
 .Breadcrumb {
@@ -67,9 +66,15 @@ body {
     background-color: rgba(0,0,0,0.3);
 }
 
-.Modal > div {
+.Modal > div.content {
     position: fixed;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
+}
+
+.Modal > div.loadingContainer {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
 }

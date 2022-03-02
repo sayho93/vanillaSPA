@@ -4,7 +4,7 @@ export default function ImageView({$app, initialState, onClick}){
     this.state = initialState
     this.onClick = onClick
     this.$target = document.createElement('div')
-    this.$target.className = 'Modal ImageView'
+    this.$target.className = 'Modal ImageViewer'
     $app.appendChild(this.$target)
 
     this.setState = nextState => {
@@ -22,6 +22,10 @@ export default function ImageView({$app, initialState, onClick}){
     }
 
     this.$target.addEventListener('click', () => this.onClick())
+    // window.addEventListener('keydown', event => {
+    //TODO
+    // if(event.key === 'Escape') this.onClick()
+    // })
 
     this.render()
 }

@@ -20,25 +20,23 @@ export default function App($app){
         $app,
         initialState: this.state.depth,
         onClick: index => {
+            if(index === this.state.depth.length - 1) return
+
             if(index === null){
                 this.setState({
                     ...this.state,
+                    isRoot: true,
                     depth: [],
                     nodes: Cache.root
                 })
-                return
+            } else{
+                const nextDepth = this.state.depth.slice(0, index + 1)
+                this.setState({
+                    ...this.state,
+                    depth: nextDepth,
+                    nodes: Cache[nextDepth[nextDepth.length - 1].id]
+                })
             }
-
-            if(index === this.state.depth.length - 1) return
-
-            const nextState = {...state}
-            const nextDepth = this.state.depth.slice(0, index + 1)
-
-            this.setState({
-                ...nextState,
-                depth: nextDepth,
-                nodes: Cache[nextDepth[nextDepth.length - 1].id]
-            })
         }
     })
 
@@ -46,48 +44,43 @@ export default function App($app){
         $app,
         initialState: {},
         onClick: async node => {
-            try{
-                if(node.type === 'DIRECTORY'){
-                    this.setState({...this.state, isLoading: true})
-                    let response
-                    if(Cache[node.id]) response = Cache[node.id]
-                    else{
-                        response = await Helper.getList(node.id)
-                        if(response.returnCode !== 1){
-                            alert(response.message)
-                            location.reload()
-                        }
-                        response = response.data
+            if(node.type === 'DIRECTORY'){
+                this.setState({...this.state, isLoading: true})
+                let response
+                if(Cache[node.id]) response = Cache[node.id]
+                else{
+                    response = await Helper.getList(node.id)
+                    if(response.returnCode !== 1){
+                        alert(response.message)
+                        location.reload()
                     }
-                    this.setState({
-                        ...this.state,
-                        isRoot: false,
-                        depth: [...this.state.depth, node],
-                        nodes: response
-                    })
-                    Cache[node.id] = response
-                }else if(node.type === 'FILE'){
-                    this.setState({
-                        ...this.state,
-                        selectedFilePath: node.filePath
-                    })
+                    response = response.data
                 }
-            } catch(error){
-                console.log(error)
-            } finally {
-                this.setState({...this.state, isLoading: false})
+                this.setState({
+                    ...this.state,
+                    isRoot: false,
+                    depth: [...this.state.depth, node],
+                    nodes: response,
+                    isLoading: false
+                })
+                Cache[node.id] = response
+            }else if(node.type === 'FILE'){
+                this.setState({
+                    ...this.state,
+                    selectedFilePath: node.filePath
+                })
             }
         },
-        onPrevClick: async () => {
-            try{
-                const nextState = {...this.state}
-                nextState.depth.pop()
-                const prevNodeId = nextState.depth.length !== 0 ? nextState.depth[nextState.depth.length - 1].id : null
-                if(!prevNodeId) this.setState({...nextState, isRoot: true, nodes: Cache.root})
-                else this.setState({...nextState, isRoot: false, nodes: Cache[prevNodeId]})
-            } catch (err){
-                console.log(err)
-            }
+        onPrev: async () => {
+            const nextState = {...this.state}
+            nextState.depth.pop()
+            const prevNode = this.state.depth.length === 0 ? null : this.state.depth[this.state.depth.length - 1]
+
+            this.setState({
+                ...nextState,
+                isRoot: this.state.depth.length === 0,
+                nodes: prevNode === null ? Cache.root : Cache[prevNode.id],
+            })
         }
     })
 
@@ -102,26 +95,23 @@ export default function App($app){
     }
 
     const init = async () => {
-        try{
-            this.setState({...this.state, isLoading: true})
-            const response = await Helper.getList()
-            console.log(response)
-            if(response.returnCode !== 1){
-                alert(response.returnMessage)
-                location.reload()
-                return
-            }
-            this.setState({
-                ...this.state,
-                isRoot: true,
-                nodes: response.data
-            })
-            Cache.root = response.data
-        } catch (err){
-            alert(err)
-        } finally {
-            this.setState({...this.state, isLoading: false})
+        this.setState({...this.state, isLoading: true})
+        const response = await Helper.getList()
+        // const response = await Helper.postTest()
+        console.log(response)
+        if(response.returnCode !== 1){
+            alert(response.returnMessage)
+            location.reload()
+            return
         }
+        // return
+        this.setState({
+            ...this.state,
+            isRoot: true,
+            nodes: response.data,
+            isLoading: false,
+        })
+        Cache.root = response.data
     }
 
     init().then(() => {

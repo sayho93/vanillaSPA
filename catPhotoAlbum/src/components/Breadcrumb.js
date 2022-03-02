@@ -20,8 +20,8 @@ export default function Breadcrumb({$app, initialState = [], onClick}) {
     this.$target.addEventListener('click', event => {
         const $navItem = event.target.closest('.nav-item')
         if($navItem){
-            const {index} = $navItem.dataset
-            this.onClick(index ? parseInt(index) : null)
+            const idx = $navItem.dataset.idx
+            this.onClick(idx ? parseInt(idx) : null)
         }
     })
 
