@@ -1,7 +1,7 @@
-export default function Nodes({$app, initialState, onClick}){
+export default function Nodes({$app, initialState, onClick, onPrevClick}){
     this.state = initialState
     this.onClick = onClick
-
+    this.onPrevClick = onPrevClick
     this.$target = document.createElement('ul')
     $app.appendChild(this.$target)
 
@@ -13,7 +13,7 @@ export default function Nodes({$app, initialState, onClick}){
     this.render = () => {
         if(this.state.nodes){
             const template = this.state.nodes.map(node => {
-                const iconPath = node.type === 'FILE' ? './assets/file.png' : './assets/folder.png'
+                const iconPath = node.type === 'FILE' ? './assets/file.png' : './assets/directory.png'
                 return `
                     <div class="Node" data-node-id="${node.id}">
                         <img src="${iconPath}" alt="${node.name}"/>
@@ -21,16 +21,23 @@ export default function Nodes({$app, initialState, onClick}){
                     </div>
                 `
             }).join('')
-            this.$target.innerHTML = !this.state.isRoot ? `<div class="Node"><img src="./assets/prev.png" alt="Back"/></div>${template}` : template
+            this.$target.innerHTML = !this.state.isRoot ? `<div class="Node"><img src="/assets/prev.png" alt="Back"/></div>${template}` : template
         }
-
-        this.$target.querySelectorAll('.Node').forEach($node => {
-            $node.addEventListener('click', event => {
-                const nodeId = event.target.closest('.Node').dataset.nodeId
-                const selectedNode = this.state.nodes.find(node => node.id === nodeId)
-                if(selectedNode) this.onClick(selectedNode)
-            })
-        })
-
     }
+
+    this.$target.addEventListener('click', event => {
+        const $node = event.target.closest('.Node')
+        if($node){
+            const nodeId = $node.dataset.nodeId
+            if(!nodeId){
+                this.onPrevClick()
+                return
+            }
+            const selectedNode = this.state.nodes.find(node => node.id === nodeId)
+            if(selectedNode) this.onClick(selectedNode)
+        }
+    })
+
+
+    this.render()
 }
