@@ -5,7 +5,7 @@ import ImageView from './components/ImageView.js'
 import Loading from './components/Loading.js'
 import Cache from './models/Cache.js'
 
-export default function App($app){
+export default function App($app) {
     this.state = {
         isRoot: true,
         nodes: [],
@@ -20,37 +20,37 @@ export default function App($app){
         $app,
         initialState: this.state.depth,
         onClick: idx => {
-            if(idx === this.state.depth.length - 1) return
+            if (idx === this.state.depth.length - 1) return
 
-            if(idx === null){
+            if (idx === null) {
                 this.setState({
                     ...this.state,
                     isRoot: true,
                     depth: [],
-                    nodes: Cache.root
+                    nodes: Cache.root,
                 })
-            } else{
+            } else {
                 const nextDepth = this.state.depth.slice(0, idx + 1)
                 this.setState({
                     ...this.state,
                     depth: nextDepth,
-                    nodes: Cache[nextDepth[nextDepth.length - 1].id]
+                    nodes: Cache[nextDepth[nextDepth.length - 1].id],
                 })
             }
-        }
+        },
     })
 
     const nodes = new Nodes({
         $app,
         initialState: {},
         onClick: async node => {
-            if(node.type === 'DIRECTORY'){
+            if (node.type === 'DIRECTORY') {
                 this.setState({...this.state, isLoading: true})
                 let response
-                if(Cache[node.id]) response = Cache[node.id]
-                else{
+                if (Cache[node.id]) response = Cache[node.id]
+                else {
                     response = await Helper.getList(node.id)
-                    if(response.returnCode !== 1){
+                    if (response.returnCode !== 1) {
                         alert(response.message)
                         location.reload()
                     }
@@ -61,13 +61,13 @@ export default function App($app){
                     isRoot: false,
                     depth: [...this.state.depth, node],
                     nodes: response,
-                    isLoading: false
+                    isLoading: false,
                 })
                 Cache[node.id] = response
-            }else if(node.type === 'FILE'){
+            } else if (node.type === 'FILE') {
                 this.setState({
                     ...this.state,
-                    selectedFilePath: node.filePath
+                    selectedFilePath: node.filePath,
                 })
             }
         },
@@ -81,10 +81,16 @@ export default function App($app){
                 isRoot: this.state.depth.length === 0,
                 nodes: prevNode === null ? Cache.root : Cache[prevNode.id],
             })
-        }
+        },
     })
 
-    const imageView = new ImageView({$app, initialState: this.state.selectedFilePath, onClick: () => this.setState({...this.state, selectedFilePath: null})})
+    const imageView = new ImageView({
+        $app,
+        initialState: this.state.selectedFilePath,
+        onClick: () => {
+            if (this.state.selectedFilePath) this.setState({...this.state, selectedFilePath: null})
+        },
+    })
 
     this.setState = nextState => {
         this.state = nextState
@@ -99,7 +105,7 @@ export default function App($app){
         const response = await Helper.getList()
         // const response = await Helper.postTest()
         console.log(response)
-        if(response.returnCode !== 1){
+        if (response.returnCode !== 1) {
             alert(response.returnMessage)
             location.reload()
             return

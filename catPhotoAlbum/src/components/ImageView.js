@@ -1,6 +1,6 @@
 import Constants from '../api/Constants.js'
 
-export default function ImageView({$app, initialState, onClick}){
+export default function ImageView({$app, initialState, onClick}) {
     this.state = initialState
     this.onClick = onClick
     this.$target = document.createElement('div')
@@ -22,10 +22,11 @@ export default function ImageView({$app, initialState, onClick}){
     }
 
     this.$target.addEventListener('click', () => this.onClick())
-    // window.addEventListener('keydown', event => {
-    //TODO
-    // if(event.key === 'Escape') this.onClick()
-    // })
+
+    document.addEventListener('keydown', event => {
+        console.log(event.key)
+        if (event.key === 'Escape') this.onClick()
+    })
 
     this.render()
 }
