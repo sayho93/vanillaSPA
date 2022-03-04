@@ -1,6 +1,5 @@
-export default function Banner({$app, initialState, onChange}) {
+export default function Banner({$app, initialState}) {
     this.state = initialState
-    this.onChange = onChange
     this.$target = document.createElement('article')
     this.$target.className = 'slider-container'
     $app.appendChild(this.$target)

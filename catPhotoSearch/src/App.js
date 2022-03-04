@@ -61,7 +61,7 @@ export default function App($app) {
             this.setState({...this.state, isLoading: true, searchTxt: keyword})
             const response = await api.fetchCats(keyword)
             if (response.returnCode === 1) {
-                const pageInfo = {...pageInfo}
+                const pageInfo = {...this.state.pageInfo}
                 pageInfo.api = 1
                 this.setState({...this.state, list: response.data.data, pageInfo})
             } else alert('status code: ' + response.returnMessage)
@@ -69,13 +69,7 @@ export default function App($app) {
         },
     })
 
-    const banner = new Banner({
-        $app,
-        initialState: this.state.bannerList,
-        onClick: async type => {
-            console.log(':::')
-        },
-    })
+    const banner = new Banner({$app, initialState: this.state.bannerList})
 
     const searchResult = new SearchResult({
         $app,
