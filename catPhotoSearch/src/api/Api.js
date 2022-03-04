@@ -7,6 +7,7 @@ const ReturnModel = {
 }
 
 const Helper = async url => {
+    console.log('API:::::::', url)
     const ret = {...ReturnModel}
     try {
         const res = await fetch(url)

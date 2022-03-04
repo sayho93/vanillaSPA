@@ -26,19 +26,20 @@ export default function SearchInput({$app, initialState, onSearch, onRandom}) {
 
     this.render = () => {
         this.$target.value = this.state
-        this.$target.addEventListener('keyup', event => {
-            console.log(event.key, event.target.value)
-            if (event.key === 'Enter') onSearch(event.target.value)
-        })
-
-        this.$target.addEventListener('click', event => {
-            if (event.target.value) event.target.value = ''
-        })
-
-        this.$button.addEventListener('click', event => {
-            onRandom()
-        })
     }
+
+    this.$target.addEventListener('keyup', event => {
+        console.log(event.key, event.target.value)
+        if (event.key === 'Enter') onSearch(event.target.value)
+    })
+
+    this.$target.addEventListener('click', event => {
+        if (event.target.value) event.target.value = ''
+    })
+
+    this.$button.addEventListener('click', event => {
+        onRandom()
+    })
 
     this.render()
 }

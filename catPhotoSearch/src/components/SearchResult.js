@@ -12,7 +12,6 @@ export default function SearchResult({$app, initialState, onClick}) {
 
     this.render = () => {
         let template = `<span class="Empty">조건에 일치하는 결과가 없습니다.</span>`
-        console.log(!this.state, length)
         if (this.state.length) {
             template = this.state
                 .map(cat => {
