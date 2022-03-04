@@ -21,22 +21,22 @@ export default function App($app) {
         $app,
         initialState: '',
         onSearch: async keyword => {
-            const history = [...this.state.history]
-            history.unshift(keyword)
-            if (history.length > 5) history.pop()
-            this.setState({...this.state, isLoading: true, history: history, searchTxt: keyword})
+            if (keyword === '') this.setState({...this.state, list: [], searchTxt: ''})
+            else {
+                const history = [...this.state.history]
+                history.unshift(keyword)
+                if (history.length > 5) history.pop()
+                this.setState({...this.state, isLoading: true, history: history, searchTxt: keyword})
 
-            const response = await api.fetchCats(keyword)
-            console.log(response)
-            if (response.returnCode === 1) this.setState({...this.state, list: response.data.data})
-            else alert('status code: ' + response.returnMessage)
-            this.setState({...this.state, isLoading: false})
+                const response = await api.fetchCats(keyword)
+                if (response.returnCode === 1) this.setState({...this.state, list: response.data.data})
+                else alert('status code: ' + response.returnMessage)
+                this.setState({...this.state, isLoading: false})
+            }
         },
         onRandom: async () => {
-            this.setState({...this.state, isLoading: true})
-
+            this.setState({...this.state, isLoading: true, searchTxt: ''})
             const response = await api.fetchRandom()
-            console.log(response)
             if (response.returnCode === 1) this.setState({...this.state, list: response.data.data})
             else alert('status code: ' + response.returnMessage)
             this.setState({...this.state, isLoading: false})
@@ -47,10 +47,8 @@ export default function App($app) {
         $app,
         initialState: this.state.history,
         onClick: async keyword => {
-            console.log(keyword)
             this.setState({...this.state, isLoading: true, searchTxt: keyword})
             const response = await api.fetchCats(keyword)
-            console.log(response)
             if (response.returnCode === 1) this.setState({...this.state, list: response.data.data})
             else alert('status code: ' + response.returnMessage)
             this.setState({...this.state, isLoading: false})
@@ -81,6 +79,7 @@ export default function App($app) {
     })
 
     this.setState = nextState => {
+        console.log('App.js setState()')
         this.state = nextState
         searchInput.setState(this.state.searchTxt)
         searchResult.setState(this.state.list)
