@@ -138,7 +138,10 @@ export default function App($app) {
             this.setState({...this.state, isLoading: true})
             const response = await api.fetchRandom()
             if (response.returnCode === 1) this.setState({...this.state, bannerList: [...response.data.data.slice(0, 5)]})
-            else alert(`status code: ${response.returnMessage}`)
+            else {
+                alert(`status code: ${response.returnMessage}`)
+                location.reload()
+            }
             this.setState({...this.state, isLoading: false})
         }
     }
