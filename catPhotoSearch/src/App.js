@@ -125,7 +125,9 @@ export default function App($app) {
         loading.setState(this.state.isLoading)
         history.setState(this.state.history)
         banner.setState(this.state.bannerList)
-        sessionStorage.setItem('data', JSON.stringify(this.state))
+        const tmp = {...this.state}
+        tmp.bannerList = null
+        sessionStorage.setItem('data', JSON.stringify(tmp.bannerList))
         console.log(this.state)
     }
 
