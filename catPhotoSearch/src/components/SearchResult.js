@@ -53,9 +53,9 @@ export default function SearchResult({$app, initialState, onClick, nextPage}) {
         const scrollHeight = Math.min(document.documentElement.scrollHeight, document.body.scrollHeight)
         const scrollTop = Math.max(document.documentElement.scrollTop, document.body.scrollTop)
         const clientHeight = document.documentElement.clientHeight
-        console.log(scrollTop, clientHeight, scrollHeight)
+        // console.log(scrollTop, clientHeight, scrollHeight)
         if (scrollTop + clientHeight > scrollHeight) {
-            this.nextPage()
+            if (this.state.length) this.nextPage()
         }
     })
 

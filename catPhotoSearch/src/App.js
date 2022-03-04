@@ -4,6 +4,7 @@ import History from './components/History.js'
 import SearchResult from './components/SearchResult.js'
 import ImageInfo from './components/ImageInfo.js'
 import Loading from './components/Loading.js'
+import Banner from './components/Banner.js'
 
 export default function App($app) {
     this.state = {
@@ -12,6 +13,7 @@ export default function App($app) {
         selectedInfo: null,
         modalVisible: false,
         history: [],
+        bannerList: null,
         searchTxt: '',
         pageInfo: {
             lock: false,
@@ -64,6 +66,14 @@ export default function App($app) {
                 this.setState({...this.state, list: response.data.data, pageInfo})
             } else alert('status code: ' + response.returnMessage)
             this.setState({...this.state, isLoading: false})
+        },
+    })
+
+    const banner = new Banner({
+        $app,
+        initialState: this.state.bannerList,
+        onClick: async type => {
+            console.log(':::')
         },
     })
 
@@ -120,13 +130,21 @@ export default function App($app) {
         imageInfo.setState({info: this.state.selectedInfo, modalVisible: this.state.modalVisible})
         loading.setState(this.state.isLoading)
         history.setState(this.state.history)
+        banner.setState(this.state.bannerList)
         sessionStorage.setItem('data', JSON.stringify(this.state))
         console.log(this.state)
     }
 
-    const init = () => {
-        // const lastData = JSON.parse(sessionStorage.getItem('data'))
-        // if (lastData) this.setState(lastData)
+    const init = async () => {
+        const lastData = JSON.parse(sessionStorage.getItem('data'))
+        if (lastData) this.setState(lastData)
+        if (!this.state.bannerList) {
+            this.setState({...this.state, isLoading: true})
+            const response = await api.fetchRandom()
+            if (response.returnCode === 1) this.setState({...this.state, bannerList: [...response.data.data.slice(0, 5)]})
+            else alert(`status code: ${response.returnMessage}`)
+            this.setState({...this.state, isLoading: false})
+        }
     }
 
     init()
