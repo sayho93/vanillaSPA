@@ -14,7 +14,7 @@ const Helper = async url => {
         if (res.ok) ret.data = await res.json()
         else {
             ret.returnCode = -1
-            ret.returnMessage = res.status
+            ret.returnMessage = `${res.status} error`
         }
         return ret
     } catch (err) {
@@ -25,9 +25,9 @@ const Helper = async url => {
 }
 
 const api = {
-    fetchCats: keyword => Helper(`${API_ENDPOINT}/cats/search?q=${keyword}`),
+    fetchCats: (keyword, page = '') => Helper(`${API_ENDPOINT}/cats/search?q=${keyword}&page=${page}`),
     fetchCatInfo: (id = '') => Helper(`${API_ENDPOINT}/cats/${id}`),
-    fetchRandom: () => Helper(`${API_ENDPOINT}/cats/random50`),
+    fetchRandom: (page = '') => Helper(`${API_ENDPOINT}/cats/random50?page=${page}`),
 }
 
 export default api

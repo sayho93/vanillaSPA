@@ -13,6 +13,11 @@ export default function App($app) {
         modalVisible: false,
         history: [],
         searchTxt: '',
+        pageInfo: {
+            lock: false,
+            apiType: 0, //0: search 1: random
+            page: '',
+        },
     }
 
     const loading = new Loading({$app, initialState: false})
@@ -29,16 +34,20 @@ export default function App($app) {
                 this.setState({...this.state, isLoading: true, history: history, searchTxt: keyword})
 
                 const response = await api.fetchCats(keyword)
-                if (response.returnCode === 1) this.setState({...this.state, list: response.data.data})
-                else alert('status code: ' + response.returnMessage)
+                if (response.returnCode === 1) {
+                    const pageInfo = {lock: false, apiType: 0, page: ''}
+                    this.setState({...this.state, list: response.data.data, pageInfo})
+                } else alert('status code: ' + response.returnMessage)
                 this.setState({...this.state, isLoading: false})
             }
         },
         onRandom: async () => {
             this.setState({...this.state, isLoading: true, searchTxt: ''})
             const response = await api.fetchRandom()
-            if (response.returnCode === 1) this.setState({...this.state, list: response.data.data})
-            else alert('status code: ' + response.returnMessage)
+            if (response.returnCode === 1) {
+                const pageInfo = {lock: false, apiType: 1, page: ''}
+                this.setState({...this.state, list: response.data.data, pageInfo})
+            } else alert('status code: ' + response.returnMessage)
             this.setState({...this.state, isLoading: false})
         },
     })
@@ -49,8 +58,11 @@ export default function App($app) {
         onClick: async keyword => {
             this.setState({...this.state, isLoading: true, searchTxt: keyword})
             const response = await api.fetchCats(keyword)
-            if (response.returnCode === 1) this.setState({...this.state, list: response.data.data})
-            else alert('status code: ' + response.returnMessage)
+            if (response.returnCode === 1) {
+                const pageInfo = {...pageInfo}
+                pageInfo.api = 1
+                this.setState({...this.state, list: response.data.data, pageInfo})
+            } else alert('status code: ' + response.returnMessage)
             this.setState({...this.state, isLoading: false})
         },
     })
@@ -64,6 +76,28 @@ export default function App($app) {
             if (response.returnCode === 1) this.setState({...this.state, selectedInfo: response.data.data, modalVisible: true})
             else alert(`status code: ${response.returnMessage}`)
             // this.setState({...this.state, isLoading: false})
+        },
+        nextPage: async () => {
+            console.log(this.state.pageInfo)
+            if (!this.state.pageInfo.lock) {
+                const pageInfo = {...this.state.pageInfo}
+                pageInfo.lock = true
+
+                pageInfo.page = this.state.pageInfo.page ? this.state.pageInfo.page + 1 : 2
+                this.setState({...this.state, pageInfo, isLoading: true})
+
+                const response =
+                    pageInfo.apiType === 0
+                        ? await api.fetchCats(this.state.searchTxt, this.state.pageInfo.page)
+                        : await api.fetchRandom(this.state.pageInfo.page)
+                if (response.returnCode === 1) {
+                    let list = [...this.state.list]
+                    list = list.concat(response.data.data)
+                    this.setState({...this.state, list: list})
+                } else alert(`status code: ${response.returnMessage}`)
+                pageInfo.lock = false
+                this.setState({...this.state, isLoading: false, pageInfo})
+            }
         },
     })
 
@@ -91,9 +125,8 @@ export default function App($app) {
     }
 
     const init = () => {
-        const lastData = JSON.parse(sessionStorage.getItem('data'))
-        console.log(lastData)
-        if (lastData) this.setState(lastData)
+        // const lastData = JSON.parse(sessionStorage.getItem('data'))
+        // if (lastData) this.setState(lastData)
     }
 
     init()

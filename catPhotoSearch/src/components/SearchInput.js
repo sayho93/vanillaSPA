@@ -29,7 +29,6 @@ export default function SearchInput({$app, initialState, onSearch, onRandom}) {
     }
 
     this.$target.addEventListener('keyup', event => {
-        console.log(event.key, event.target.value)
         if (event.key === 'Enter') onSearch(event.target.value)
     })
 

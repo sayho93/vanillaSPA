@@ -127,6 +127,7 @@ body * {
     width: 100vw;
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.5);
+    z-index: 11;
 }
 
 .ImageInfo .title {
@@ -153,6 +154,71 @@ body * {
     width: 100%;
 }
 
+.Modal {
+    z-index: 11;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.Modal > div.loadingContainer {
+    z-index: 11;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.Empty {
+    width: 100%;
+    text-align: center;
+    margin-left: 3vw;
+    margin-top: 5vw;
+}
+
+.history {
+    border-radius: 25px;
+    width: 10vw;
+    font-size: 17px;
+    color: 007bff;
+    margin-right: 2vw;
+}
+
+.Overlay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 10;
+    transform: translate(-50%, -50%);
+    width: 350px;
+    padding: 10px;
+    background-color: white;
+    box-shadow: 0 3px 5px #0005;
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.7s, transform 0.7s;
+    color: #000;
+    z-index: 1;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.fadeIn {
+    animation-name: fadeIn;
+    animation-duration: 1s;
+}
+
 /* dark mode 처리 */
 @media (prefers-color-scheme: dark) {
     body {
@@ -169,35 +235,9 @@ body * {
         background-color: white;
         color: #000;
     }
-}
 
-.Modal {
-    z-index: 1;
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    left: 0;
-    top: 0;
-    background-color: rgba(0, 0, 0, 0.3);
-}
-
-.Modal > div.loadingContainer {
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.Empty {
-    width: 100%;
-    text-align: center;
-    margin-left: 3vw;
-    margin-top: 5vw;
-}
-
-.history {
-    width: 10vw;
-    font-size: 15px;
-    color: 007bff;
-    margin-right: 2vw;
+    .Overlay {
+        background-color: #000;
+        color: white;
+    }
 }

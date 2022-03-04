@@ -20,7 +20,7 @@ export default function ImageInfo({$app, initialState, onClose}) {
                 <div class="content-wrapper">
                 <div class="title">
                     <span>${name}</span>
-                    <div class="close">x</div>
+                    <div class="close" style="font-size: 20px;">x</div>
                 </div>
                 <img src="${url}" alt="${name}"/>        
                 <div class="description">

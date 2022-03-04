@@ -14,19 +14,18 @@ export default function History({$app, initialState, onClick}) {
         if (this.state.length) {
             const template = this.state
                 .map(history => {
-                    return /*html*/ `<button class="history" data-keyword="${history}">${history}</button>`
+                    return /*html*/ `<history class="history" data-keyword="${history}">${history}</history>`
                 })
                 .join('')
 
             this.$target.innerHTML = template
-
-            this.$target.querySelectorAll('.history').forEach(($item, index) => {
-                $item.addEventListener('click', event => {
-                    this.onClick(event.target.dataset.keyword)
-                })
-            })
         }
     }
+
+    this.$target.addEventListener('click', event => {
+        const target = event.target.closest('.history')
+        if (target) this.onClick(target.dataset.keyword)
+    })
 
     this.render()
 }
