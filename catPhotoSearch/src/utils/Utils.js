@@ -1,26 +1,28 @@
 export const fadeOut = element => {
     element.style.opacity = 1
 
-    const fade = () => {
+    const fadeOutProc = () => {
+        // console.log('fadeout:::')
         if ((element.style.opacity -= 0.1) < 0) {
             element.style.display = 'none'
         } else {
-            requestAnimationFrame(fade)
+            requestAnimationFrame(fadeOutProc)
         }
     }
-    fade()
+    fadeOutProc()
 }
 
 export const fadeIn = (element, display) => {
     element.style.opacity = 0
     element.style.display = display || 'block'
 
-    const fade = () => {
+    const fadeInProc = () => {
+        // console.log('fadeIn:::')
         var val = parseFloat(element.style.opacity)
         if (!((val += 0.1) > 1)) {
             element.style.opacity = val
-            requestAnimationFrame(fade)
+            requestAnimationFrame(fadeInProc)
         }
     }
-    fade()
+    fadeInProc()
 }

@@ -75,6 +75,9 @@ export default function App($app) {
             info: null,
             modalVisible: false,
         },
+        onClose: () => {
+            this.setState({...this.state, modalVisible: false})
+        },
     })
 
     this.setState = nextState => {
@@ -84,11 +87,14 @@ export default function App($app) {
         imageInfo.setState({info: this.state.selectedInfo, modalVisible: this.state.modalVisible})
         loading.setState(this.state.isLoading)
         history.setState(this.state.history)
+        sessionStorage.setItem('data', JSON.stringify(this.state))
         console.log(this.state)
     }
 
     const init = () => {
-        //
+        const lastData = JSON.parse(sessionStorage.getItem('data'))
+        console.log(lastData)
+        if (lastData) this.setState(lastData)
     }
 
     init()

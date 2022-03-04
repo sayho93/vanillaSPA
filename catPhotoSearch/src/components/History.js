@@ -14,7 +14,7 @@ export default function History({$app, initialState, onClick}) {
         if (this.state.length) {
             const template = this.state
                 .map(history => {
-                    return `<button class="history" data-keyword="${history}">${history}</button>`
+                    return /*html*/ `<button class="history" data-keyword="${history}">${history}</button>`
                 })
                 .join('')
 

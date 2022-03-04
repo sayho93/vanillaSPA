@@ -16,11 +16,11 @@ export default function SearchResult({$app, initialState, onClick}) {
         if (this.state.length) {
             template = this.state
                 .map(cat => {
-                    return `
-            <div class="item">
-              <img src=${cat.url} alt=${cat.name} />
-            </div>
-          `
+                    return /*html*/ `
+                        <div class="item" data-name="${cat.name}">
+                            <img src=${cat.url} alt=${cat.name} />
+                        </div>
+                    `
                 })
                 .join('')
         }
@@ -29,6 +29,14 @@ export default function SearchResult({$app, initialState, onClick}) {
         this.$target.querySelectorAll('.item').forEach(($item, index) => {
             $item.addEventListener('click', () => {
                 this.onClick(this.state[index])
+            })
+
+            $item.addEventListener('mouseover', event => {
+                const target = event.target.closest('.item')
+                if (target) {
+                    const name = target.dataset.name
+                    console.log(name)
+                }
             })
         })
     }

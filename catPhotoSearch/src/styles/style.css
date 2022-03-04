@@ -33,7 +33,6 @@ body * {
 }
 
 .SearchInput {
-    display: inline-block;
     width: 50vw;
     margin-right: 1vw;
     font-size: 40px;
@@ -41,12 +40,12 @@ body * {
 }
 
 .RandomBtn {
-    display: inline-block;
     text-align: center;
     float: right;
     width: 8vw;
     font-size: 20px;
-    padding: 25px 15px;
+    margin: 2px 0;
+    padding: 24px 15px;
     background-color: white;
 }
 
