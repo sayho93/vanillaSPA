@@ -33,11 +33,11 @@ export default function Banner({$app, initialState, onChange}) {
             let template = this.state
                 .map(
                     (cat, idx) => /*html */ `
-                        <slide class="slides fadeIn">
+                        <div class="slides fadeIn">
                             <div class="slider-numbers">${idx + 1}/${this.state.length}</div>
-                            <div><img class="slider-image" src="${cat.url}" alt="${cat.name}"></div>
+                            <div class="slider-image-container"><img class="slider-image" src="${cat.url}" alt="${cat.name}"></div>
                             <div class="slider-caption">${cat.name}</div>
-                        </slide>
+                        </div>
                     `
                 )
                 .join('')
@@ -57,18 +57,14 @@ export default function Banner({$app, initialState, onChange}) {
             this.index = 1
             this.showImage()
         }
-
-        this.$target.addEventListener('click', event => {
-            const plus = event.target.closest('.plusIndex')
-            const to = event.target.closest('.toIndex')
-            if (plus) {
-                this.plusIndex(+plus.dataset.value)
-            }
-            if (to) {
-                this.toIndex(+to.dataset.idx)
-            }
-        })
     }
+
+    this.$target.addEventListener('click', event => {
+        const plus = event.target.closest('.plusIndex')
+        const to = event.target.closest('.toIndex')
+        if (plus) this.plusIndex(+plus.dataset.value)
+        if (to) this.toIndex(+to.dataset.idx)
+    })
 
     this.render()
 }
