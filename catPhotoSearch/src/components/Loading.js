@@ -10,7 +10,7 @@ export default function Loading({$app, initialState}) {
     }
 
     this.render = () => {
-        this.$target.innerHTML = `
+        this.$target.innerHTML = /*html*/ `
             <div class="loadingContainer">
                 <img src="./assets/Goyang.gif" alt="Loading..." style="width: 100%" />
             </div>
