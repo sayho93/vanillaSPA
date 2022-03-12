@@ -22,7 +22,7 @@ export default function App({$app}) {
     const onSelect = (event, idx = null) => {
         event.preventDefault()
         if (idx !== null) this.setState({...this.state, selectedSuggestion: idx})
-        const name = this.state.suggestion[this.state.selectedSuggestion]
+        const name = this.state.suggestion[this.state.selectedSuggestion].org
         alert(name)
 
         if (this.state.selected.includes(name)) return

@@ -4,13 +4,13 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "start": "serve -s -l 8000"
+        "start": "serve -s -l 8002"
     },
     "keywords": [],
     "author": "rotoshine",
     "license": "ISC",
     "dependencies": {
-        "serve": "^12.0.0",
+        "serve": "^13.0.2",
         "@babel/core": "^7.8.3",
         "@babel/preset-env": "^7.8.3"
     }
