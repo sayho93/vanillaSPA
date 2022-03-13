@@ -1,4 +1,4 @@
-// import debounce from "../utils/debounce.js"
+import debounce from '../utils/debounce.js'
 
 export default function SearchInput({$app, initialState, searchTxtHandler, selectedHandler, onSelect}) {
     this.state = initialState
@@ -12,16 +12,6 @@ export default function SearchInput({$app, initialState, searchTxtHandler, selec
         this.render()
     }
 
-    function debounce(callback, limit = 1000) {
-        let timeout
-        return function (...args) {
-            clearTimeout(timeout)
-            timeout = setTimeout(() => {
-                callback.apply(this, args)
-            }, limit)
-        }
-    }
-
     this.render = () => {
         this.$target.innerHTML = `
             <input class="SearchInput__input" type="text" placeholder="프로그램 언어를 입력하세요." value="${this.state}">
@@ -33,8 +23,7 @@ export default function SearchInput({$app, initialState, searchTxtHandler, selec
         // })
 
         function keyUpFn(event) {
-            clearTimeout(debounce)
-            debounce = setTimeout(() => searchTxtHandler(event.target.value), 500)
+            debounce(() => searchTxtHandler(event.target.value), 500)()
         }
 
         input.addEventListener('input', keyUpFn)
